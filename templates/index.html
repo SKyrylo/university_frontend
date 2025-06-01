@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>RAG - Home</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="home-container">
+    <section class="hero">
+        <h1>Welcome to RAG</h1>
+        <p>Your intelligent document processing solution</p>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <h2>What is RAG?</h2>
+            <p>Retrieval-Augmented Generation (RAG) combines the power of large language models with your own data.</p>
+        </div>
+        <div class="feature-card">
+            <h2>How it Works</h2>
+            <p>Upload your documents, ask questions, and get accurate answers based on your content.</p>
+        </div>
+        <div class="feature-card">
+            <h2>Why Choose RAG?</h2>
+            <p>Get precise, context-aware responses while maintaining control over your data.</p>
+        </div>
+    </section>
+
+    <section class="cta">
+        <a href="{{ url_for('info') }}" class="cta-button info-button">Learn More</a>
+        <a href="{{ url_for('try_rag') }}" class="cta-button try-button">Try RAG</a>
+        <a href="{{ url_for('documents_page') }}" class="cta-button documents-button">Manage Documents</a>
+    </section>
+</main>
+{% endblock %}

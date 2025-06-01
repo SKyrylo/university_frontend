@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>RAG - Learn More</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/info.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<main class="info-container">
+    <section class="hero">
+        <h1>Understanding RAG</h1>
+        <p>Retrieval-Augmented Generation: Enhancing AI with Your Knowledge</p>
+    </section>
+
+    <section class="info-grid">
+        <div class="info-card">
+            <i class="fas fa-database info-icon"></i>
+            <h2>What is RAG?</h2>
+            <p>RAG combines the power of large language models with your own data to provide more accurate and contextually relevant responses. It's like giving AI a personalized knowledge base to work with.</p>
+        </div>
+
+        <div class="info-card">
+            <i class="fas fa-cogs info-icon"></i>
+            <h2>How It Works</h2>
+            <p>When you ask a question, RAG first searches through your documents to find relevant information. Then, it uses this information to generate a response that's both accurate and specific to your context.</p>
+        </div>
+
+        <div class="info-card">
+            <i class="fas fa-chart-line info-icon"></i>
+            <h2>Benefits</h2>
+            <ul class="benefits-list">
+                <li>More accurate responses based on your specific data</li>
+                <li>Reduced hallucinations and incorrect information</li>
+                <li>Better context understanding</li>
+                <li>Customized knowledge base</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <i class="fas fa-puzzle-piece info-icon"></i>
+            <h2>Components</h2>
+            <ul class="components-list">
+                <li>Document Processing</li>
+                <li>Vector Database</li>
+                <li>Retrieval System</li>
+                <li>Language Model</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="process-flow">
+        <h2>The RAG Process</h2>
+        <div class="process-steps">
+            <div class="process-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Document Upload</h3>
+                    <p>Upload your PDF documents to the system. The documents will be processed and indexed for efficient retrieval.</p>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Question Input</h3>
+                    <p>Ask questions about your documents in natural language. The system will understand and process your query.</p>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Context Retrieval</h3>
+                    <p>The system retrieves relevant information from your documents to provide context for the answer.</p>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Answer Generation</h3>
+                    <p>Using the retrieved context, the system generates accurate and relevant answers to your questions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <h2>Ready to Try RAG?</h2>
+        <div class="cta-buttons">
+            <a href="{{ url_for('try_rag') }}" class="cta-button try-button">Try RAG Now</a>
+            <a href="{{ url_for('documents_page') }}" class="cta-button documents-button">Manage Documents</a>
+        </div>
+    </section>
+</main>
+
+<script src="{{ url_for('static', filename='js/info.js') }}"></script>
+{% endblock %} 

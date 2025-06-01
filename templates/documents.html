@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>RAG - Documents</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/documents.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<main class="documents-container">
+    <section class="upload-section">
+        <h1>Document Management</h1>
+        <div class="upload-box" id="dropZone">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                <div class="upload-content">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <p>Drag and drop PDF files here or</p>
+                    <button type="button" class="upload-button" onclick="document.getElementById('fileInput').click()">
+                        Choose Files
+                    </button>
+                    <p class="upload-hint">Maximum file size: 16MB</p>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="documents-table">
+        <h2>Uploaded Documents</h2>
+        <div class="table-container">
+            <table id="documentsTable">
+                <thead>
+                    <tr>
+                        <th>Document Name</th>
+                        <th>Size</th>
+                        <th>Upload Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="documentsTableBody">
+                    <!-- Table content will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3>Confirm Delete</h3>
+        <p>Are you sure you want to delete this document?</p>
+        <div class="modal-buttons">
+            <button class="modal-button cancel-button" onclick="closeModal()">Cancel</button>
+            <button class="modal-button confirm-button" id="confirmDelete">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/documents.js') }}"></script>
+{% endblock %} 
