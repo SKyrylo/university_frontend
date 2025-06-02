@@ -8,9 +8,18 @@
 {% endblock %}
 
 {% block content %}
+<a href="{{ url_for('home') }}" class="home-button">
+    <i class="fas fa-home"></i>
+    Home
+</a>
+
 <main class="documents-container">
     <section class="upload-section">
         <h1>Document Management</h1>
+        <a href="{{ url_for('try_rag') }}" class="try-rag-button">
+            <i class="fas fa-robot"></i>
+            Try RAG
+        </a>
         <div class="upload-box" id="dropZone">
             <form id="uploadForm" enctype="multipart/form-data">
                 <input type="file" id="fileInput" accept=".pdf" style="display: none;">

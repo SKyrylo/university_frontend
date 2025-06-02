@@ -59,42 +59,35 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        uploadFile(file);
+        uploadDocument(file);
     }
 
     // Upload file to server
-    function uploadFile(file) {
+    async function uploadDocument(file) {
         const formData = new FormData();
         formData.append('file', file);
 
-        // Show loading state
-        dropZone.classList.add('loading');
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
 
-        fetch('/api/upload', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
+            const data = await response.json();
+            
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(data.error || 'Failed to upload file');
             }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                loadDocuments(); // Refresh table
-                fileInput.value = ''; // Clear input
-            } else {
-                throw new Error(data.error || 'Upload failed');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Upload failed: ' + error.message);
-        })
-        .finally(() => {
-            dropZone.classList.remove('loading');
-        });
+
+            // Refresh document list
+            loadDocuments();
+            
+            // Show success message
+            showNotification('Document uploaded successfully', 'success');
+        } catch (error) {
+            console.error('Upload error:', error);
+            showNotification(error.message || 'Failed to upload document', 'error');
+        }
     }
 
     // Load documents from server
@@ -136,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <td>${formatFileSize(doc.size)}</td>
             <td>${formattedDate}</td>
             <td>
-                <button class="action-button delete-button" onclick="showDeleteModal('${doc.id}')">
+                <button class="action-button delete-button" onclick="showDeleteModal('${doc.name}')">
                     Delete
                 </button>
             </td>
@@ -172,25 +165,38 @@ function closeModal() {
 }
 
 // Delete document
-function deleteDocument(id) {
-    fetch(`/api/documents/${id}`, {
-        method: 'DELETE'
-    })
-    .then(response => {
+async function deleteDocument(id) {
+    try {
+        const response = await fetch(`/api/documents/${id}`, {
+            method: 'DELETE'
+        });
+
+        const data = await response.json();
+        
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(data.error || 'Failed to delete file');
         }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            loadDocuments(); // Refresh table
-        } else {
-            throw new Error(data.error || 'Delete failed');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Delete failed: ' + error.message);
-    });
+
+        // Refresh document list
+        loadDocuments();
+        
+        // Show success message
+        showNotification('Document deleted successfully', 'success');
+    } catch (error) {
+        console.error('Delete error:', error);
+        showNotification(error.message || 'Failed to delete document', 'error');
+    }
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Remove notification after 3 seconds
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
 } 

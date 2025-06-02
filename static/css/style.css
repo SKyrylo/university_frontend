@@ -139,6 +139,36 @@ body {
     transform: translateY(-2px);
 }
 
+/* Home Button */
+.home-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: var(--accent-primary);
+    color: var(--text-primary);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.home-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: var(--gradient-end);
+}
+
+.home-button i {
+    font-size: 1.2rem;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .hero {
@@ -161,5 +191,12 @@ body {
     .cta-button {
         width: 100%;
         text-align: center;
+    }
+
+    .home-button {
+        top: 10px;
+        left: 10px;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
     }
 }

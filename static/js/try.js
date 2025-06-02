@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             // Add new messages to chat
-            data.messages.slice(-2).forEach(msg => {
+            data.messages.forEach(msg => {
                 addMessageToChat(msg, msg.role === 'user');
             });
             
@@ -113,7 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
             const errorMessage = {
                 content: 'Sorry, there was an error processing your question. Please try again.',
-                role: 'bot'
+                role: 'bot',
+                timestamp: new Date().toISOString()
             };
             addMessageToChat(errorMessage, false);
         } finally {
@@ -124,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to load chat history
     async function loadChatHistory() {
         try {
-            const response = await fetch('/api/chat/history');
+            const response = await fetch('/api/chats');
             if (!response.ok) {
                 throw new Error('Failed to load chat history');
             }
@@ -171,26 +172,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Failed to load chat');
             }
 
-            const chat = await response.json();
+            const chatData = await response.json();
             currentChatId = chatId;
             
             // Clear existing messages
             chatMessages.innerHTML = '';
             
             // Add messages to chat
-            chat.messages.forEach(msg => {
-                addMessageToChat(msg, msg.role === 'user');
-            });
+            if (Array.isArray(chatData)) {
+                chatData.forEach(msg => {
+                    const message = {
+                        role: 'user',
+                        content: msg.question,
+                        timestamp: msg.timestamp
+                    };
+                    addMessageToChat(message, true);
+                    
+                    const botMessage = {
+                        role: 'bot',
+                        content: msg.answer,
+                        timestamp: msg.timestamp
+                    };
+                    addMessageToChat(botMessage, false);
+                });
+            }
             
             // Update active state in history table
             const rows = historyTable.querySelectorAll('tbody tr');
             rows.forEach(row => row.classList.remove('active'));
-            rows[chatId - 1]?.classList.add('active');
+            const activeRow = Array.from(rows).find(row => row.cells[0].textContent === `#${chatId}`);
+            if (activeRow) {
+                activeRow.classList.add('active');
+            }
 
             // Enable delete button
             deleteChatBtn.disabled = false;
         } catch (error) {
             console.error('Error loading chat:', error);
+            showNotification('Failed to load chat history', 'error');
         }
     }
 
@@ -228,12 +247,26 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const timeDiv = document.createElement('div');
         timeDiv.className = 'message-time';
-        timeDiv.textContent = formatTime(new Date());
+        timeDiv.textContent = formatTime(new Date(message.timestamp));
         
         messageDiv.appendChild(contentDiv);
         messageDiv.appendChild(timeDiv);
         
         chatMessages.appendChild(messageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Function to show notification
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        // Remove notification after 3 seconds
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
     }
 }); 
